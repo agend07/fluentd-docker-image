@@ -34,10 +34,10 @@ RUN git clone https://github.com/tagomoris/xbuild.git /home/ubuntu/.xbuild
 RUN /home/ubuntu/.xbuild/ruby-install 2.2.2 /home/ubuntu/ruby
 
 ENV PATH /home/ubuntu/ruby/bin:$PATH
+WORKDIR /home/ubuntu
 RUN gem install fluentd -v 0.12.15
 RUN gem install fluent-plugin-s3
 
-WORKDIR /home/ubuntu
 
 ENV FLUENTD_OPT="--suppress-config-dump"
 ENV FLUENTD_CONF="fluent.conf"
@@ -45,4 +45,4 @@ ENV FLUENTD_CONF="fluent.conf"
 EXPOSE 24224
 
 ### docker run -p 24224 -v `pwd`/log: -v `pwd`/log:/home/ubuntu/log fluent/fluentd:latest
-CMD fluentd -c /fluentd/etc/$FLUENTD_CONF -p /fluentd/plugins $FLUENTD_OPT
+CMD fluentd -c /fluentd/etc/fluent.conf -p /fluentd/plugins --suppress-config-dump
