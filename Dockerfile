@@ -1,6 +1,4 @@
 FROM ubuntu:14.04
-MAINTAINER TAGOMORI Satoshi <tagomoris@gmail.com>
-LABEL Description="Fluentd docker image" Vendor="Fluent Organization" Version="1.0"
 
 RUN apt-get update -y && apt-get install -y \
               autoconf \
@@ -37,16 +35,11 @@ RUN /home/ubuntu/.xbuild/ruby-install 2.2.2 /home/ubuntu/ruby
 
 ENV PATH /home/ubuntu/ruby/bin:$PATH
 RUN gem install fluentd -v 0.12.15
-
-# RUN gem install fluent-plugin-webhdfs
-
-COPY fluent.conf /fluentd/etc/
-ONBUILD COPY fluent.conf /fluentd/etc/
-ONBUILD COPY plugins/* /fluentd/plugins/
+RUN gem install fluent-plugin-s3
 
 WORKDIR /home/ubuntu
 
-ENV FLUENTD_OPT=""
+ENV FLUENTD_OPT="--suppress-config-dump"
 ENV FLUENTD_CONF="fluent.conf"
 
 EXPOSE 24224
